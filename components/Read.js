@@ -30,7 +30,7 @@ var Read = function(directory){
 				var file = files[i];
 				var fileExtension = path.extname(file);
 
-				if (fileExtension === '.jpg' || fileExtension === '.png' || fileExtension === '.gif'){
+				if (fileExtension === '.jpg' || fileExtension === '.jpeg' || fileExtension === '.png' || fileExtension === '.gif'){
 					filesToProcess.push(file);
 				}
 			}
