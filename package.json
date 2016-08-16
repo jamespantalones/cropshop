@@ -23,5 +23,13 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/edweena/phlegm-cropper"
-  }
+  },
+  "keywords": [
+    "image resize",
+    "image crop",
+    "resize",
+    "crop",
+    "image compression",
+    "lazy load"
+  ]
 }
