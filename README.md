@@ -1,3 +1,6 @@
+![cropshop logo](https://raw.githubusercontent.com/edweena/cropshop/master/logo.png)
+
+
 # CROPSHOP
 ## Small Image Cropper
 
