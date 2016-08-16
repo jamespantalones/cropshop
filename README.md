@@ -5,7 +5,6 @@
 
 WARNING: ALPHA RELEASE IN ACTIVE DEVELOPMENT. BREAKING CHANGES MAY OCCUR UNTIL BETA RELEASE – WHICH WILL BE SOON
 
-var sizes = [40, 240, 360, 640, 960, 1280, 1920];
 
 This is a command line module that simply searches a given folder for images (currently **.png, .jpg, .jpeg, and .gif**) and renders those images in a number of different sizes (currently **40px, 240px, 360px, 640px, 960px, 1280px, 1920px**). Why? Because now you have various options that can be loaded programmatically for a lazy load lifestyle. The module also pipes images through `imagemin` for compression. Also, all images maintain aspect ratio, so *technically* nothing is actually being cropped – just resized. 
 
@@ -37,5 +36,7 @@ And run the command
 ```
 cropshop
 ```
+
+You now have a bunch of other images.
 
 
