@@ -13,18 +13,15 @@
 // Required packages
 //		
 var chalk = require('chalk');
-var imagemin = require('imagemin');
-var prompt = require('prompt');
 
 
 var Read = require('./components/Read');
 var Process = require('./components/Process');
 var Compress = require('./components/Compress');
 
-global.directory = __dirname;
+global.directory = process.cwd();
 
 
-var compressionAmount = 65;
 var sizes = [40, 280, 360, 640, 960, 1280, 1920];
 
 
@@ -40,62 +37,55 @@ function finished(){
 //
 //--------------------------------------------
 
-prompt.start();
-
-
-prompt.get(['Compression amount; 0—100'], function(err, result){
+console.log('CURRENT DIRECTORY', directory);
 	
-	
-	compressionAmount = result['Compression amount; 0—100'] || 65;
+//--------------------------------------------
+// Read all files in current folder
+//
+
+Read(directory).then(function(files){
 	
 	//--------------------------------------------
-	// Read all files in current folder
-	//
+	// Take list of image files returned and process
+	//	
 
-	Read(directory).then(function(files){
+	Process(files, directory).then(function(msg){
+
 		
 		//--------------------------------------------
-		// Take list of image files returned and process
-		//	
-
-		Process(files, directory).then(function(msg){
+		// Read directory with newly created files
+		//
+				
+		Read(directory).then(function(newFiles){
 
 			
 			//--------------------------------------------
-			// Read directory with newly created files
+			// Compress images
 			//
-					
-			Read(directory).then(function(newFiles){
 
-				
-				//--------------------------------------------
-				// Compress images
-				//
+			Compress(newFiles).then(function(final){
 
-				Compress(newFiles).then(function(final){
+				finished();
 
-					finished();
+			}, function(compressErr){
 
-				}, function(compressErr){
-
-					console.log(compressErr)
-				});
-
-
-			}, function(readErr){
-				console.log(readErr);
+				console.log(compressErr)
 			});
 
-		}, function(processErr){
-			console.log('ERROR in PROCESS OPERATION');
+
+		}, function(readErr){
+			console.log(readErr);
 		});
-	
-	}, function(initialReadErr){
-		console.log(initialReadErr);
+
+	}, function(processErr){
+		console.log('ERROR in PROCESS OPERATION');
 	});
 
+}, function(initialReadErr){
+	console.log(initialReadErr);
 });
-		
+
+
 
 
 
