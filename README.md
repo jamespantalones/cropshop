@@ -7,7 +7,7 @@ This module does only one thing. It makes your images 40px wide. Why does it do 
 
 ### Setting up a CROPSHOP
 
-You need ImageMagick + GraphicsMagick installed
+You need ImageMagick + GraphicsMagick installed. I know. This is a downer. But I can't find another viable method that relies on simply Node. sorry. However, if you are on mac, these are pretty trivial to install.
 
 ```
 brew install imagemagick
@@ -38,6 +38,7 @@ You will then get a prompt asking you to enter how many px wide you want your im
 If you do nothing, it will default to 40px.
 
 Hit enter.
+
 
 
 
