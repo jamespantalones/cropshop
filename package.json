@@ -1,6 +1,6 @@
 {
   "name": "phlegm-cropper",
-  "version": "0.0.1-alpha1",
+  "version": "0.0.2-alpha1",
   "description": "Simple command line tool which crops images to 40px for use with phlegm lazy loading lifestyle",
   "main": "index.js",
   "bin": {
