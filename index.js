@@ -3,7 +3,7 @@
 
 //--------------------------------------------
 //
-// Phlegm Cropper
+// Cropshop
 //
 //--------------------------------------------
 'use strict';
@@ -77,7 +77,7 @@ prompt.get(['Compression amount; 0—100'], function(err, result){
 					finished();
 
 				}, function(compressErr){
-					
+
 					console.log(compressErr)
 				});
 
