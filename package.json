@@ -3,9 +3,6 @@
   "version": "0.0.1-alpha1",
   "description": "Simple command line tool which crops images to 40px for use with phlegm lazy loading lifestyle",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "bin": {
     "phlegm-crop": "./index.js"
   },
