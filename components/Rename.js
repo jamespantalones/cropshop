@@ -14,7 +14,7 @@ var Rename = function(imagePath, basename, fileExtension){
 
 
 	var deferred = q.defer();
-	var newName = global.directory + '/' + basename + '_og' + fileExtension;
+	var newName = global.directory + '/' + basename + fileExtension;
 	
 	fs.rename(imagePath, newName, function(err){
 		
