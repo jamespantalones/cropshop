@@ -1,6 +1,6 @@
 {
   "name": "cropshop",
-  "version": "0.0.43-alpha1",
+  "version": "0.0.44",
   "description": "Simple command line tool which crops images to a variety of sizes [40, 240, 360, 640, 960, 1280, 1920] to cope with a lazy load lifestyle",
   "main": "index.js",
   "bin": {
