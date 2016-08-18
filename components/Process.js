@@ -18,104 +18,83 @@ var path = require('path');
 var q = require('q');
 var Rename = require('./Rename');
 
-var sizes = [40, 240, 360, 640, 960, 1280, 1920];
-
 
 //--------------------------------------------
 // Process function
 //
 		
-var Process = function(files, directory){
+var Process = function(files, directory, sizes){
 
-
+	//--------------------------------------------
+	// Set up promise
+	//
+			
 	var deferred = q.defer();
 
 	
+	//--------------------------------------------
+	// Loop through each file in files array
+	//		
 	async.each(files, function(file, callback){
 
+		//Get full file path. Current directory + filename
 		var imagePath = directory + '/' + file;
+
+		//Get file extension
 		var fileExtension = path.extname(file);
-		var basename = path.basename(file, fileExtension);
 
-		if (basename.indexOf('_og') > -1){
-			console.log(chalk.red('File already exists'));
-			callback();
-		}
+		//Get name of file WITHOUT file extension
+		var basename = path.basename(imagePath, fileExtension);
 
-		else{
+
+		//--------------------------------------------
+		// Loop through sizes
+		//	
+		async.each(sizes, function(size, cb){
+
+			fs.readFile(imagePath, function(err, data){
+				if (err){
+					cb();
+				}
+
+				else{
+					gm(imagePath)
+						.resize(size)
+						.write(global.directory + '/' + basename + '_crop_' + size + fileExtension,
+							function(err){
+								if (!err){
+
+									console.log(chalk.green('Created: '), chalk.yellow(basename + '_crop_' + size + fileExtension));
+									cb();
+								}
+
+								else{
+									console.log('WRITE ERROR', err);
+									cb('err');
+								}
+						}
+					);
+				}
+			})
+			
+
+			
+
+		}, function(error){
+			if (error){
+				console.log('a size error', error);
+			}
 
 			//--------------------------------------------
-			// Rename file
-			//
+			// Run callback on first async
+			//	
+			else{
+				callback();
+			}
+		})
 
-			Rename(
-				imagePath,
-				basename,
-				fileExtension
-				)
-				.then(function(newImagePath){
+			
 
-					basename = path.basename(newImagePath, fileExtension);
-
-					
-
-
-					//--------------------------------------------
-					// Loop through sizes
-					//	
-					async.each(sizes, function(size, cb){
-						
-						console.log(chalk.cyan(global.directory + '/' + basename + '_' + size + fileExtension));
-						//--------------------------------------------
-						// See if file has already been processed
-						//
-						console.log(chalk.magenta(basename, size, basename.indexOf(size) > -1))
-						if (basename.indexOf(size) > -1){
-							console.log(chalk.red('size already exists, skipping'));
-							cb();
-						}
-
-						else{
-
-							gm(newImagePath)
-								.resize(size)
-								.write(global.directory + '/' + basename + '_' + size + fileExtension,
-									function(err){
-										if (!err){
-											cb();
-										}
-
-										else{
-											console.log(err);
-											cb('err');
-										}
-								}
-							);
-						}
-
-					}, function(error){
-						if (error){
-							console.log('a size error', error);
-						}
-
-						//--------------------------------------------
-						// Run callback on first async
-						//	
-						else{
-							callback();
-						}
-					})
-
-					
-
-				//--------------------------------------------
-				// Error handling for second async op
-				//		
-				}, function(err){
-					callback(err);
-			});
-
-		}
 
 	//--------------------------------------------
 	// Error handling + final for first async op

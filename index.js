@@ -13,22 +13,22 @@
 // Required packages
 //		
 var chalk = require('chalk');
+var program = require('commander');
 
 
 var Read = require('./components/Read');
+var Clean = require('./components/Clean');
 var Process = require('./components/Process');
 var Compress = require('./components/Compress');
 
 global.directory = process.cwd();
 
-
-var sizes = [40, 280, 360, 640, 960, 1280, 1920];
+var sizeDefaults = [40, 280, 360, 640, 960, 1280, 1920];
 
 
 function finished(){
-	console.log('👾 👾 👾 👾 👾 👾 👾 👾 👾');
-	console.log(chalk.yellow.bgBlue('All files processed successfully.'));
-	console.log('👾 👾 👾 👾 👾 👾 👾 👾 👾');
+	console.log(chalk.yellow.bold.underline('All files processed successfully.\n\n'));
+	process.exit(0);
 }
 
 //--------------------------------------------
@@ -37,56 +37,99 @@ function finished(){
 //
 //--------------------------------------------
 
-console.log('CURRENT DIRECTORY', directory);
+//console.log('CURRENT DIRECTORY', directory);
 	
 //--------------------------------------------
 // Read all files in current folder
 //
 
-Read(directory).then(function(files){
-	
-	//--------------------------------------------
-	// Take list of image files returned and process
-	//	
 
-	Process(files, directory).then(function(msg){
+function start(sizes, filepath){
+
+	Read(directory, filepath).then(function(files){
 
 		
 		//--------------------------------------------
-		// Read directory with newly created files
+		// Clean out all files with _crop_ present
 		//
 				
-		Read(directory).then(function(newFiles){
+		Clean(files, sizes).then(function(cleanedFiles){
 
-			
 			//--------------------------------------------
-			// Compress images
+			// Take list of image files returned and process
 			//
 
-			Compress(newFiles).then(function(final){
+			Process(cleanedFiles, directory, sizes).then(function(msg){
 
-				finished();
+				
+				//--------------------------------------------
+				// Read directory with newly created files
+				//
+						
+				Read(directory).then(function(newFiles){
 
-			}, function(compressErr){
+					
+					//--------------------------------------------
+					// Compress images
+					//
 
-				console.log(compressErr)
+					Compress(newFiles).then(function(final){
+
+						finished();
+
+					}, function(compressErr){
+
+						console.log(compressErr)
+					});
+
+
+				}, function(readErr){
+					console.log(readErr);
+				});
+
+			}, function(processErr){
+				console.log('ERROR in PROCESS OPERATION');
 			});
 
-
-		}, function(readErr){
-			console.log(readErr);
+		}, function(cleaningError){
+			console.log('ERROR in cleaning operation');
 		});
 
-	}, function(processErr){
-		console.log('ERROR in PROCESS OPERATION');
+	}, function(initialReadErr){
+		console.log(initialReadErr);
 	});
-
-}, function(initialReadErr){
-	console.log(initialReadErr);
-});
+}
 
 
 
+//--------------------------------------------
+//
+// Start Program
+//
+//--------------------------------------------
+		
+program
+	.version('0.0.1')
+	.usage('<sizes>')
+	.option('-i, --image [filename]', 'Specify a specific file')
+	.parse(process.argv);
+
+if (!program.args.length){
+	program.help();
+}
+
+else{
+	var sizes = program.args;
+	var filename = '';
+
+	if (program.image){
+		filename = program.image;
+	}
+	
+	console.log(chalk.cyan.bold('\n\nPreparing to crop to size(s): '), chalk.black.bgCyan(program.args));
+	
+	start(sizes, filename);
+}
 
 
 
