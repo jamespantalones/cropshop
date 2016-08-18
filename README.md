@@ -5,6 +5,8 @@
 
 DISCLAIMER: BETA RELEASE IN ACTIVE DEVELOPMENT
 
+**UPDATE 0.0.61 / AUG 18 2016: SPECIFY CUSTOM CROP WIDTHS VIA COMMAND LINE**
+
 This is a command line module that simply searches a given folder for images (currently **.png, .jpg, .jpeg, and .gif**) and renders those images in a number of specified sizes. Why? Because now you have various options that can be loaded programmatically for a lazy load lifestyle. The module also pipes images through `imagemin` for compression. Also, all images maintain aspect ratio, so *technically* nothing is actually being cropped – just resized. Although cropping options in the works for social media sharing.
 
 
